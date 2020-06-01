@@ -9,10 +9,11 @@
 
 import logging
 
-import numpy as np
-import tensorflow as tf
 import keras
+# import matplotlib
+import matplotlib.pyplot as plt
 
+# a = matplotlib.get_backend()
 # __all__ = []
 
 _log_format = "%(asctime)s [ %(levelname)s ] %(process)d(%(thread)d)-%(filename)s(line:%(lineno)s) | %(message)s"
@@ -45,7 +46,7 @@ def app():
     # 新增 词汇符号 进入词汇索引字典，并调整词汇索引
     # print(decode_text(d_word_index, train_data[0]))  # 文本原文(调整词汇索引前，貌似转换的内容不对)
     # print()
-        d_word_index = {k: (v + 3) for k, v in d_word_index.items()}
+    d_word_index = {k: (v + 3) for k, v in d_word_index.items()}
     d_word_index["<PAD>"] = 0
     d_word_index["<START>"] = 1
     d_word_index["<UNK>"] = 2  # unknown
@@ -84,19 +85,42 @@ def app():
     model.compile(optimizer=optimizer, loss=loss_fnc, metrics=metrics)
 
     # 进行模型训练
-        history = model.fit(partial_x_train,
+    history = model.fit(partial_x_train,
                         partial_y_train,
                         epochs=40,
                         batch_size=512,
                         validation_data=(x_val, y_val),
                         verbose=1)
+    # 模型训练过程状态
+    d_history = history.history
+    print(d_history.keys())
+
+    acc = d_history['accuracy']
+    val_acc = d_history['val_accuracy']
+    loss = d_history['loss']
+    val_loss = d_history['val_loss']
+    epochs = range(1, len(acc) + 1)
+
+    # “bo”代表 "蓝点"
+    plt.plot(epochs, loss, 'bo', label='Training loss')
+    # b代表“蓝色实线”
+    plt.plot(epochs, val_loss, 'b', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.show()
 
     # 模型评估
     results = model.evaluate(test_data, test_labels, verbose=2)
     print(results)
+
     pass
 
 
 if __name__ == "__main__":
     app()
     pass
+
+
+# %%
