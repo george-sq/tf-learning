@@ -10,13 +10,9 @@
 import logging
 
 import keras
-# import matplotlib
 import matplotlib.pyplot as plt
 
-# a = matplotlib.get_backend()
-# __all__ = []
-
-_log_format = "%(asctime)s [ %(levelname)s ] %(process)d(%(thread)d)-%(filename)s(line:%(lineno)s) | %(message)s"
+_log_format = "%(asctime)s [ %(levelname)s ] | %(message)-100s || %(filename)s(line:%(lineno)s)-%(process)d(%(thread)d)"
 _date_format = "%Y-%m-%d(%A) %H:%M:%S(%Z)"
 logging.basicConfig(level=logging.DEBUG,
                     format=_log_format,
@@ -59,8 +55,10 @@ def app():
     # print(f"train_data[1] len: {len(train_data[1])}")
 
     # 将原始文本数据，进行 预处理编码
-    train_data = keras.preprocessing.sequence.pad_sequences(train_data, value=d_word_index["<PAD>"], padding='post', maxlen=256)
-    test_data = keras.preprocessing.sequence.pad_sequences(test_data, value=d_word_index["<PAD>"], padding='post', maxlen=256)
+    train_data = keras.preprocessing.sequence.pad_sequences(train_data, value=d_word_index["<PAD>"], padding='post',
+                                                            maxlen=256)
+    test_data = keras.preprocessing.sequence.pad_sequences(test_data, value=d_word_index["<PAD>"], padding='post',
+                                                           maxlen=256)
     logger.info("Train shape: {}, Test shape: {}".format(train_data.shape, test_data.shape))
     # 创建交叉验证集
     x_val = train_data[:10000]
@@ -121,6 +119,5 @@ def app():
 if __name__ == "__main__":
     app()
     pass
-
 
 # %%

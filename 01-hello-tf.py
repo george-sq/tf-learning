@@ -9,12 +9,10 @@
 
 import logging
 
-import tensorflow as tf
 import keras
-# __all__ = []
+import tensorflow as tf
 
-# _log_format = "%(asctime)s [ %(levelname)s ] %(process)d(%(thread)d)-%(filename)s(line:%(lineno)s) | %(message)s"
-_log_format = "%(asctime)s [ %(levelname)s ] | %(message)s || %(filename)s(line:%(lineno)s)-%(process)d(%(thread)d)"
+_log_format = "%(asctime)s [ %(levelname)s ] | %(message)-100s || %(filename)s(line:%(lineno)s)-%(process)d(%(thread)d)"
 _date_format = "%Y-%m-%d(%A) %H:%M:%S(%Z)"
 logging.basicConfig(level=logging.DEBUG,
                     format=_log_format,
@@ -43,7 +41,7 @@ def app():
     ])
 
     # 设置模型训练参数
-        logger.info("设置模型训练参数:")
+    logger.info("设置模型训练参数:")
     optimizer = "adam"
     loss = "sparse_categorical_crossentropy"
     metrics = ['accuracy']
