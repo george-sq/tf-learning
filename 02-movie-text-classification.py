@@ -26,6 +26,40 @@ def decode_text(word_index: dict = None, encoded_seq=None):
     return ' '.join([d_index_word.get(i, '<???>') for i in encoded_seq])
 
 
+def show_image(dict_history):
+    # 模型训练过程状态
+    d_history = dict_history.history
+    print(d_history.keys())
+
+    acc = d_history['accuracy']
+    val_acc = d_history['val_accuracy']
+    loss = d_history['loss']
+    val_loss = d_history['val_loss']
+    epochs = range(1, len(acc) + 1)
+
+    # “bo”代表 "蓝点"
+    plt.plot(epochs, loss, 'bo', label='Training loss')
+    # b代表“蓝色实线”
+    plt.plot(epochs, val_loss, 'b', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.show()
+
+    plt.clf()  # 清除数字
+
+    plt.plot(epochs, acc, 'bo', label='Training acc')
+    plt.plot(epochs, val_acc, 'b', label='Validation acc')
+    plt.title('Training and validation accuracy')
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.legend()
+
+    plt.show()
+    pass
+
+
 def app():
     # 数据集加载
     imdb = keras.datasets.imdb
@@ -90,24 +124,7 @@ def app():
                         validation_data=(x_val, y_val),
                         verbose=1)
     # 模型训练过程状态
-    d_history = history.history
-    print(d_history.keys())
-
-    acc = d_history['accuracy']
-    val_acc = d_history['val_accuracy']
-    loss = d_history['loss']
-    val_loss = d_history['val_loss']
-    epochs = range(1, len(acc) + 1)
-
-    # “bo”代表 "蓝点"
-    plt.plot(epochs, loss, 'bo', label='Training loss')
-    # b代表“蓝色实线”
-    plt.plot(epochs, val_loss, 'b', label='Validation loss')
-    plt.title('Training and validation loss')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.legend()
-    plt.show()
+    show_image(history)
 
     # 模型评估
     results = model.evaluate(test_data, test_labels, verbose=2)
